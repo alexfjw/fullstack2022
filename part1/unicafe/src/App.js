@@ -13,22 +13,27 @@ const increment = (amount, helper) => {
 }
 
 const StatisticLine = ({prefix, value, suffix=""}) => {
-  const display = `${prefix} ${value} ${suffix}`.trimEnd()
-  return <p>{display}</p>
+  return (
+    <tr>
+      <td>{prefix}</td>
+      <td>{value}</td>
+      <td>{suffix}</td>
+    </tr>
+  );
 }
 
 const Statistics = ({good, neutral, bad}) => {
   if (good+neutral+bad === 0) {
       return <p>No feedback given</p>
   }
-  return <div>
+  return <table>
     <StatisticLine prefix="good" value={good}/>
     <StatisticLine prefix="neutral" value={neutral}/>
     <StatisticLine prefix="bad" value={bad}/>
     <StatisticLine prefix="all" value={good+neutral+bad}/>
     <StatisticLine prefix="average" value={(good+neutral*0+bad*-1)/(good+neutral+bad)}/>
     <StatisticLine prefix="positive" value={good/(good+neutral+bad)*100} suffix="%"/>
-  </div>
+  </table>
 }
 
 const App = () => {
