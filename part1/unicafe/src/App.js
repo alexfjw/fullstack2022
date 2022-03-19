@@ -1,64 +1,41 @@
 
+
+import { useState } from 'react'
+
+const Button = ({onClick, text}) => {
+  return <button onClick={onClick}>{text}</button>
+}
+
+const increment = (amount, helper) => {
+  return () => { 
+    helper(amount+1)
+  }
+}
+
+
 const App = () => {
-  const course = {
-    name: "Half Stack application development",
-    parts: [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
-    ],
-  };
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
   return (
     <div>
-      <Header course={course.name}/>
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
+      <h1>give feedback</h1>
+      <div>
+        <Button onClick={increment(good, setGood)} text="good"/>
+        <Button onClick={increment(neutral, setNeutral)} text="neutral"/>
+        <Button onClick={increment(bad, setBad)} text="bad"/>
+      </div>
+      <h1>statistics</h1>
+      <div>
+        <p>good {good}</p>
+        <p>neutral {neutral}</p>
+        <p>bad {bad}</p>
+      </div>
     </div>
   )
 }
 
-const Header = (props) => {
-  return (
-    <h1>{props.course}</h1>
-  )
-}
-
-const Content = (props) => {
-  const parts = props.parts
-  return (
-    <>
-      <Part name={parts[0].name} exercises={parts[0].exercises}/>
-      <Part name={parts[1].name} exercises={parts[1].exercises}/>
-      <Part name={parts[2].name} exercises={parts[2].exercises}/>
-    </>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.name} {props.exercises}
-    </p>
-  )
-}
-
-const Total = (props) => {
-    const count = props.parts.reduce(
-        (total, part) => total + part.exercises,
-        0)
-    return (
-      <p>Number of exercises {count}</p>
-    )
-}
-
 export default App
+
