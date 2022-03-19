@@ -12,6 +12,24 @@ const increment = (amount, helper) => {
   }
 }
 
+const StatisticLine = ({prefix, value, suffix=""}) => {
+  const display = `${prefix} ${value} ${suffix}`.trimEnd()
+  return <p>{display}</p>
+}
+
+const Statistics = ({good, neutral, bad}) => {
+  if (good+neutral+bad === 0) {
+      return <p>No feedback given</p>
+  }
+  return <div>
+    <StatisticLine prefix="good" value={good}/>
+    <StatisticLine prefix="neutral" value={neutral}/>
+    <StatisticLine prefix="bad" value={bad}/>
+    <StatisticLine prefix="all" value={good+neutral+bad}/>
+    <StatisticLine prefix="average" value={(good+neutral*0+bad*-1)/(good+neutral+bad)}/>
+    <StatisticLine prefix="positive" value={good/(good+neutral+bad)*100} suffix="%"/>
+  </div>
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -28,11 +46,7 @@ const App = () => {
         <Button onClick={increment(bad, setBad)} text="bad"/>
       </div>
       <h1>statistics</h1>
-      <div>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-      </div>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
