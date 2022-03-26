@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
+import personService from './persons'
 
 
 const Filter = ({value, handler}) => {
@@ -15,8 +15,8 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((data) => {
+      setPersons(data);
     });
   }, []);
   
@@ -27,9 +27,24 @@ const App = () => {
         return
     }
     
-    setPersons([...persons].concat({name: newName, number: newNumber}))
-    setNewName('')
-    setNewNumber('')
+    const newPerson = {name: newName, number: newNumber}
+    personService.create(newPerson)
+      .then(() => {
+        setPersons([...persons].concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+  }
+
+  const removePerson = (p) => {
+    return () => {
+      if (window.confirm(`Delete ${p.name}?`)) {
+        personService.remove(p.id)
+          .then(() => {
+            setPersons(persons.filter(other => other.id !== p.id))
+          })
+      }
+    }
   }
 
   const handleNameChange = (ev) => {
@@ -69,6 +84,7 @@ const App = () => {
             <tr key={p.name}>
               <td>{p.name}</td>
               <td>{p.number}</td>
+              <td><button onClick={removePerson(p)}>delete</button></td>
             </tr>
           ))}
         </tbody>
