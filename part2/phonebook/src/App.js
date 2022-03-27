@@ -8,8 +8,31 @@ const Filter = ({value, handler}) => {
     </div>
 }
 
+const Notification = ({ message }) => {
+  const style = {
+    color: "green",
+    background: "lightgrey",
+    fontSize: "20px",
+    borderStyle: "solid",
+    borderRadius: "5px",
+    padding: "10px",
+    marginBottom: "10px",
+  }
+  if (message === '') {
+    return null
+  }
+
+  return (
+    <div className='notification' 
+      style={style}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [notification, setNotification] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -33,6 +56,11 @@ const App = () => {
         setPersons([...persons].concat(newPerson))
         setNewName('')
         setNewNumber('')
+
+        setNotification(`Added ${newName}`)
+        setTimeout(()=> {
+          setNotification(``)
+        }, 5000)
       })
   }
 
@@ -62,6 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter value={newFilter} handler={handleFilterChange}/>
       <h2>add a new</h2>
       <form onSubmit={addName}>
